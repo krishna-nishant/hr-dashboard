@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
-import { SunIcon, MoonIcon, BookmarkIcon } from '@heroicons/react/24/outline';
-import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
+import { SunIcon, MoonIcon, BookmarkIcon, ChartBarIcon } from '@heroicons/react/24/outline';
+import { BookmarkIcon as BookmarkSolid, ChartBarIcon as ChartBarSolid } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { useBookmarks } from '@/store/useBookmarks';
 import { usePathname } from 'next/navigation';
@@ -13,6 +13,7 @@ export function Navbar() {
   const { bookmarkedIds } = useBookmarks();
   const pathname = usePathname();
   const isBookmarksPage = pathname === '/bookmarks';
+  const isAnalyticsPage = pathname === '/analytics';
   
   // Use state to prevent hydration mismatch
   const [mounted, setMounted] = useState(false);
@@ -38,7 +39,7 @@ export function Navbar() {
               <Link 
                 href="/"
                 className={`px-3 py-2 text-sm font-medium rounded-md ${
-                  !isBookmarksPage 
+                  !isBookmarksPage && !isAnalyticsPage
                     ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
                     : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                 }`}
@@ -65,6 +66,22 @@ export function Navbar() {
                     {bookmarkedIds.length}
                   </span>
                 )}
+              </Link>
+              
+              <Link 
+                href="/analytics"
+                className={`px-3 py-2 text-sm font-medium rounded-md flex items-center ${
+                  isAnalyticsPage
+                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                {isAnalyticsPage ? (
+                  <ChartBarSolid className="h-4 w-4 mr-1.5 text-blue-500" />
+                ) : (
+                  <ChartBarIcon className="h-4 w-4 mr-1.5" />
+                )}
+                Analytics
               </Link>
             </div>
           </div>
