@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HR Dashboard
 
-## Getting Started
+A modern HR dashboard built with Next.js, Tailwind CSS, and Zustand for managing employee performance and analytics.
 
-First, run the development server:
+## 📋 Features Implemented
 
+### Core Features
+- **Dashboard Homepage** - View all employees with performance ratings and action buttons
+- **Employee Details** - Detailed employee profiles with tabbed interface (Overview, Projects, Feedback)
+- **Bookmarks System** - Save and manage employees of interest
+- **Search & Filtering** - Filter employees by name, department, and performance rating
+- **Analytics Dashboard** - View department performance metrics and bookmark trends
+
+### Technical Features
+- Responsive design (mobile to desktop)
+- Dark/Light mode support
+- Custom hooks for search and bookmarks
+- Zustand state management
+- Dynamic charting with Chart.js
+- Component-level loading and error states
+
+## 🚀 Setup Instructions
+
+### Prerequisites
+- Node.js 16+ and npm/yarn
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/krishna-nishant/hr-dashboard.git
+cd hr-dashboard
+```
+
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Run the development server
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+hr-dashboard/
+├── src/
+│   ├── app/                   # Next.js App Router pages
+│   │   ├── page.tsx           # Dashboard homepage
+│   │   ├── bookmarks/         # Bookmarked employees
+│   │   ├── employee/          # Employee details
+│   │   ├── analytics/         # Analytics dashboard
+│   │   └── ...
+│   ├── components/            # Reusable UI components
+│   │   ├── UserCard.tsx       # Employee card component
+│   │   ├── FilterBar.tsx      # Search and filter component
+│   │   ├── employee/          # Employee page components
+│   │   └── ...
+│   ├── hooks/                 # Custom React hooks
+│   │   ├── useSearch.ts       # Search and filter logic
+│   │   └── ...
+│   ├── store/                 # Zustand state management
+│   │   └── useBookmarks.ts    # Bookmark state management
+│   ├── services/              # API services
+│   │   └── api.ts             # API calls for fetching data
+│   ├── types/                 # TypeScript type definitions
+│   │   └── user.ts            # User and related types
+│   └── utils/                 # Utility functions
+│       └── mockDataGenerator.ts # Generate mock data
+├── public/                    # Static assets
+│   └── screenshots/           # Application screenshots
+├── tailwind.config.ts         # Tailwind CSS configuration
+└── package.json               # Project dependencies
+```
 
-## Learn More
+## 📸 Screenshots
 
-To learn more about Next.js, take a look at the following resources:
+### Dashboard Homepage
+![Dashboard Homepage](/public/screenshots/dashboard.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Employee Details
+![Employee Details Page](/public/screenshots/employee-details.png)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Bookmarks Page
+![Bookmarks Page](/public/screenshots/bookmarks.png)
 
-## Deploy on Vercel
+### Analytics Dashboard
+![Analytics Dashboard](/public/screenshots/analytics.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Built With
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js](https://nextjs.org/) - React framework
+- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+- [Zustand](https://github.com/pmndrs/zustand) - State management
+- [Chart.js](https://www.chartjs.org/) - Charting library
+- [React Chartjs 2](https://react-chartjs-2.js.org/) - React wrapper for Chart.js
+
