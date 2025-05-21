@@ -1,18 +1,62 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
+import { SunIcon, MoonIcon, BookmarkIcon } from '@heroicons/react/24/outline';
+import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
+import Link from 'next/link';
+import { useBookmarks } from '@/store/useBookmarks';
+import { usePathname } from 'next/navigation';
 
 export function Navbar() {
   const { theme, setTheme } = useTheme();
+  const { bookmarkedIds } = useBookmarks();
+  const pathname = usePathname();
+  const isBookmarksPage = pathname === '/bookmarks';
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-sm">
+    <nav className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">HR Dashboard</span>
+            <Link href="/" className="flex items-center">
+              <span className="text-xl font-bold text-gray-900 dark:text-white mr-8">HR Dashboard</span>
+            </Link>
+            
+            <div className="hidden sm:ml-6 sm:flex sm:space-x-4">
+              <Link 
+                href="/"
+                className={`px-3 py-2 text-sm font-medium rounded-md ${
+                  !isBookmarksPage 
+                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                Dashboard
+              </Link>
+              
+              <Link 
+                href="/bookmarks"
+                className={`px-3 py-2 text-sm font-medium rounded-md flex items-center ${
+                  isBookmarksPage
+                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                {isBookmarksPage ? (
+                  <BookmarkSolid className="h-4 w-4 mr-1.5 text-amber-500" />
+                ) : (
+                  <BookmarkIcon className="h-4 w-4 mr-1.5" />
+                )}
+                Bookmarks
+                {bookmarkedIds.length > 0 && (
+                  <span className="ml-1.5 px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                    {bookmarkedIds.length}
+                  </span>
+                )}
+              </Link>
+            </div>
           </div>
+          
           <div className="flex items-center">
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}

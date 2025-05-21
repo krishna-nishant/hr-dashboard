@@ -1,14 +1,22 @@
 import { User } from '@/types/user';
-import { StarIcon, BookmarkIcon, ArrowUpIcon } from '@heroicons/react/24/solid';
+import { StarIcon, BookmarkIcon as BookmarkOutline } from '@heroicons/react/24/outline';
+import { StarIcon as StarSolid, BookmarkIcon as BookmarkSolid, ArrowUpIcon } from '@heroicons/react/24/solid';
+import { useBookmarks } from '@/store/useBookmarks';
 
 interface UserCardProps {
   user: User;
   onView: (user: User) => void;
-  onBookmark: (user: User) => void;
   onPromote: (user: User) => void;
 }
 
-export default function UserCard({ user, onView, onBookmark, onPromote }: UserCardProps) {
+export default function UserCard({ user, onView, onPromote }: UserCardProps) {
+  const { isBookmarked, toggleBookmark } = useBookmarks();
+  const bookmarked = isBookmarked(user.id);
+
+  const handleBookmarkClick = () => {
+    toggleBookmark(user.id);
+  };
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-5 hover:shadow-lg transition-all duration-200">
       <div className="flex items-start gap-3">
@@ -41,7 +49,7 @@ export default function UserCard({ user, onView, onBookmark, onPromote }: UserCa
           <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">Performance:</span>
           <div className="flex">
             {[...Array(5)].map((_, index) => (
-              <StarIcon
+              <StarSolid
                 key={index}
                 className={`w-4 h-4 ${
                   index < user.performanceRating
@@ -61,11 +69,19 @@ export default function UserCard({ user, onView, onBookmark, onPromote }: UserCa
             View
           </button>
           <button
-            onClick={() => onBookmark(user)}
-            className="flex items-center px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            onClick={handleBookmarkClick}
+            className={`flex items-center px-3 py-1.5 text-sm rounded transition-colors ${
+              bookmarked 
+                ? 'bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:hover:bg-amber-900/50' 
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+            }`}
           >
-            <BookmarkIcon className="w-3.5 h-3.5 mr-1.5" />
-            Save
+            {bookmarked ? (
+              <BookmarkSolid className="w-3.5 h-3.5 mr-1.5" />
+            ) : (
+              <BookmarkOutline className="w-3.5 h-3.5 mr-1.5" />
+            )}
+            {bookmarked ? 'Saved' : 'Save'}
           </button>
           <button
             onClick={() => onPromote(user)}

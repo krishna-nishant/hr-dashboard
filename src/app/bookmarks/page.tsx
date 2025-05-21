@@ -4,14 +4,20 @@ import { useEffect, useState } from 'react';
 import { User } from '@/types/user';
 import { fetchUsers } from '@/services/api';
 import UserCard from '@/components/UserCard';
+import { useBookmarks } from '@/store/useBookmarks';
+import { BookmarkIcon } from '@heroicons/react/24/outline';
 import FilterBar from '@/components/FilterBar';
 import { useSearch } from '@/hooks/useSearch';
 
-export default function DashboardPage() {
-  const [users, setUsers] = useState<User[]>([]);
+export default function BookmarksPage() {
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { bookmarkedIds } = useBookmarks();
   
+  const bookmarkedUsers = allUsers.filter(user => bookmarkedIds.includes(user.id));
+  
+  // Apply search and filters to bookmarked users
   const {
     searchTerm,
     setSearchTerm,
@@ -20,30 +26,29 @@ export default function DashboardPage() {
     updateRatingFilters,
     resetFilters,
     filteredUsers
-  } = useSearch(users);
+  } = useSearch(bookmarkedUsers);
 
+  // Get all users once
   useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        const data = await fetchUsers();
+        setAllUsers(data);
+      } catch (err) {
+        setError('Failed to load bookmarked employees');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadUsers();
   }, []);
 
-  const loadUsers = async () => {
-    try {
-      const data = await fetchUsers();
-      setUsers(data);
-    } catch (err) {
-      setError('Something went wrong. Please try again later.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleView = (user: User) => {
     alert(`Viewing ${user.firstName}'s profile`);
-    // Would navigate to user profile in a real app
   };
 
   const handlePromote = (user: User) => {
-    // Simple promotion feedback
     if (user.performanceRating < 4) {
       alert(`${user.firstName}'s performance rating is too low for promotion.`);
     } else {
@@ -56,23 +61,10 @@ export default function DashboardPage() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-            Team Performance Dashboard
+            Your Bookmarks
           </h1>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6">
-            <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-5 h-48 animate-pulse">
-                <div className="flex gap-3">
-                  <div className="w-14 h-14 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                  <div className="flex-1">
-                    <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="flex justify-center items-center h-40">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
           </div>
         </div>
       </div>
@@ -82,19 +74,44 @@ export default function DashboardPage() {
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
-        <div className="max-w-6xl mx-auto text-center">
+        <div className="max-w-6xl mx-auto">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-            Team Performance Dashboard
+            Your Bookmarks
           </h1>
-          <div className="p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-            <h2 className="text-xl text-red-600 mb-2">Oops! Something went wrong</h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">{error}</p>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <p className="text-red-500">{error}</p>
             <button 
-              onClick={loadUsers}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
               Try Again
             </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show empty state if no bookmarks
+  if (bookmarkedUsers.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+            Your Bookmarks
+          </h1>
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md text-center">
+            <BookmarkIcon className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-3" />
+            <h2 className="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">No bookmarks yet</h2>
+            <p className="text-gray-500 dark:text-gray-400 mb-6">
+              You haven't bookmarked any employees yet. Go to the dashboard and click "Save" on employee cards to bookmark them.
+            </p>
+            <a 
+              href="/"
+              className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
+              Go to Dashboard
+            </a>
           </div>
         </div>
       </div>
@@ -105,7 +122,7 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-          Team Performance Dashboard
+          Your Bookmarks
         </h1>
         
         <FilterBar 
@@ -116,14 +133,14 @@ export default function DashboardPage() {
           selectedRatings={filters.ratings}
           onRatingChange={updateRatingFilters}
           onReset={resetFilters}
-          totalCount={users.length}
+          totalCount={bookmarkedUsers.length}
           filteredCount={filteredUsers.length}
         />
         
         {filteredUsers.length === 0 ? (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 text-center">
             <p className="text-gray-600 dark:text-gray-300">
-              No employees found matching your filters. Try adjusting your search criteria.
+              No bookmarked employees match your filters. Try adjusting your search criteria.
             </p>
           </div>
         ) : (
@@ -141,4 +158,4 @@ export default function DashboardPage() {
       </div>
     </div>
   );
-}
+} 
