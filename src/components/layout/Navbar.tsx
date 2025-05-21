@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { SunIcon, MoonIcon, BookmarkIcon } from '@heroicons/react/24/outline';
 import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
@@ -8,10 +9,21 @@ import { useBookmarks } from '@/store/useBookmarks';
 import { usePathname } from 'next/navigation';
 
 export function Navbar() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const { bookmarkedIds } = useBookmarks();
   const pathname = usePathname();
   const isBookmarksPage = pathname === '/bookmarks';
+  
+  // Use state to prevent hydration mismatch
+  const [mounted, setMounted] = useState(false);
+  
+  // After mounting, we can safely show the UI
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  // Determine which icon to show based on the current theme
+  const showSunIcon = mounted && (resolvedTheme === 'dark');
 
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-10">
@@ -59,14 +71,16 @@ export function Navbar() {
           
           <div className="flex items-center">
             <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              onClick={() => setTheme(showSunIcon ? 'light' : 'dark')}
               className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? (
-                <SunIcon className="h-5 w-5 text-gray-800 dark:text-gray-200" />
-              ) : (
-                <MoonIcon className="h-5 w-5 text-gray-800 dark:text-gray-200" />
+              {mounted && (
+                showSunIcon ? (
+                  <SunIcon className="h-5 w-5 text-gray-600 dark:text-gray-200" />
+                ) : (
+                  <MoonIcon className="h-5 w-5 text-gray-600 dark:text-gray-200" />
+                )
               )}
             </button>
           </div>

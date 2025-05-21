@@ -1,21 +1,20 @@
 import { User } from '@/types/user';
-import { StarIcon, BookmarkIcon as BookmarkOutline } from '@heroicons/react/24/outline';
-import { StarIcon as StarSolid, BookmarkIcon as BookmarkSolid, ArrowUpIcon } from '@heroicons/react/24/solid';
+import { StarIcon as StarSolid, DocumentTextIcon } from '@heroicons/react/24/solid';
 import { useBookmarks } from '@/store/useBookmarks';
 import Link from 'next/link';
 
-interface UserCardProps {
+interface BookmarkCardProps {
   user: User;
   onView: (user: User) => void;
   onPromote: (user: User) => void;
+  onAssignToProject: (user: User) => void;
 }
 
-export default function UserCard({ user, onView, onPromote }: UserCardProps) {
-  const { isBookmarked, toggleBookmark } = useBookmarks();
-  const bookmarked = isBookmarked(user.id);
+export default function BookmarkCard({ user, onView, onPromote, onAssignToProject }: BookmarkCardProps) {
+  const { removeBookmark } = useBookmarks();
 
-  const handleBookmarkClick = () => {
-    toggleBookmark(user.id);
+  const handleRemoveBookmark = () => {
+    removeBookmark(user.id);
   };
 
   return (
@@ -62,7 +61,7 @@ export default function UserCard({ user, onView, onPromote }: UserCardProps) {
           </div>
         </div>
 
-        <div className="flex gap-2 mt-1">
+        <div className="flex flex-wrap gap-2 mt-1">
           <Link 
             href={`/employee/${user.id}`}
             className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
@@ -75,26 +74,23 @@ export default function UserCard({ user, onView, onPromote }: UserCardProps) {
             View
           </Link>
           <button
-            onClick={handleBookmarkClick}
-            className={`flex items-center px-3 py-1.5 text-sm rounded transition-colors ${
-              bookmarked 
-                ? 'bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:hover:bg-amber-900/50' 
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
-            }`}
+            onClick={handleRemoveBookmark}
+            className="flex items-center px-3 py-1.5 bg-red-100 text-red-700 text-sm rounded hover:bg-red-200 transition-colors dark:bg-red-900/30 dark:text-red-300 dark:hover:bg-red-900/50"
           >
-            {bookmarked ? (
-              <BookmarkSolid className="w-3.5 h-3.5 mr-1.5" />
-            ) : (
-              <BookmarkOutline className="w-3.5 h-3.5 mr-1.5" />
-            )}
-            {bookmarked ? 'Saved' : 'Save'}
+            Remove
           </button>
           <button
             onClick={() => onPromote(user)}
-            className="flex items-center ml-auto px-3 py-1.5 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors"
+            className="flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors"
           >
-            <ArrowUpIcon className="w-3.5 h-3.5 mr-1.5" />
             Promote
+          </button>
+          <button
+            onClick={() => onAssignToProject(user)}
+            className="flex items-center px-3 py-1.5 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 transition-colors"
+          >
+            <DocumentTextIcon className="w-3.5 h-3.5 mr-1.5" />
+            Assign Project
           </button>
         </div>
       </div>

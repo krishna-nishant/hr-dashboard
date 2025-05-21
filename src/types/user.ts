@@ -18,4 +18,5 @@ export interface DummyUser {
   email: string;
   age: number;
   image: string;
+  gender: string;
 } 
