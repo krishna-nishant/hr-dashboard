@@ -2,13 +2,14 @@
 
 const nextConfig = {
   output: 'export',
-  basePath: process.env.NODE_ENV === 'production' ? '/hr-dashboard' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/hr-dashboard/' : '',
+  basePath: '/hr-dashboard',
+  assetPrefix: '/hr-dashboard/',
   images: {
     unoptimized: true,
+    loader: 'custom',
+    loaderFile: './src/utils/imageLoader.ts',
   },
   trailingSlash: true,
-  distDir: 'dist',
 };
 
 export default nextConfig;
