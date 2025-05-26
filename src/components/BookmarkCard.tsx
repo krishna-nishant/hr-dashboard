@@ -66,12 +66,12 @@ export default function BookmarkCard({ user, onView, onPromote, onAssignToProjec
 
         <div className="flex flex-wrap gap-2 mt-2">
           <Link
-            href={`/employee/${user.id}`}
+            href={`/hr-dashboard/employee/${user.id}`}
             className="px-3 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors"
             onClick={(e) => {
               e.preventDefault()
               onView(user)
-              window.location.href = `/employee/${user.id}`
+              window.location.href = `/hr-dashboard/employee/${user.id}`
             }}
           >
             View
