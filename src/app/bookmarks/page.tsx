@@ -8,6 +8,7 @@ import { useBookmarks } from "@/store/useBookmarks"
 import { BookmarkIcon } from "@heroicons/react/24/outline"
 import FilterBar from "@/components/FilterBar"
 import { useSearch } from "@/hooks/useSearch"
+import Link from 'next/link'
 
 export default function BookmarksPage() {
   const [allUsers, setAllUsers] = useState<User[]>([])
@@ -34,7 +35,7 @@ export default function BookmarksPage() {
       try {
         const data = await fetchUsers()
         setAllUsers(data)
-      } catch (err) {
+      } catch {
         setError("Failed to load bookmarked employees")
       } finally {
         setLoading(false)
@@ -139,12 +140,12 @@ export default function BookmarksPage() {
               You haven't bookmarked any employees yet. Go to the dashboard and click "Save" on employee cards to
               bookmark them.
             </p>
-            <a
+            <Link
               href="/"
               className="inline-flex items-center px-5 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-200 shadow-sm"
             >
               Go to Dashboard
-            </a>
+            </Link>
           </div>
         </div>
       </div>

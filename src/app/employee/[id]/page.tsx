@@ -11,6 +11,7 @@ import OverviewTab from "@/components/employee/OverviewTab"
 import ProjectsTab from "@/components/employee/ProjectsTab"
 import FeedbackTab from "@/components/employee/FeedbackTab"
 import { generateEmployeeDetails } from "@/utils/mockDataGenerator"
+import Image from 'next/image'
 
 export default function EmployeePage() {
   const { id } = useParams()
@@ -22,28 +23,35 @@ export default function EmployeePage() {
 
   useEffect(() => {
     const fetchEmployee = async () => {
+      if (!id) {
+        setError("Invalid employee ID")
+        setLoading(false)
+        return
+      }
+
       try {
         setLoading(true)
+        setError(null)
         const users = await fetchUsers()
         const foundEmployee = users.find((user) => user.id.toString() === id)
 
         if (foundEmployee) {
           setEmployee(foundEmployee)
           // Generate mock data for the employee
-          setEmployeeDetails(generateEmployeeDetails(foundEmployee))
+          const details = generateEmployeeDetails(foundEmployee)
+          setEmployeeDetails(details)
         } else {
           setError("Employee not found")
         }
-      } catch (err) {
-        setError("Failed to load employee data")
+      } catch (error) {
+        console.error("Error fetching employee:", error)
+        setError("Failed to load employee data. Please try again later.")
       } finally {
         setLoading(false)
       }
     }
 
-    if (id) {
-      fetchEmployee()
-    }
+    fetchEmployee()
   }, [id])
 
   if (loading) {
@@ -120,11 +128,14 @@ export default function EmployeePage() {
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
           <div className="p-6 border-b border-gray-200 dark:border-gray-700">
             <div className="flex flex-col sm:flex-row items-start sm:items-center">
-              <img
-                src={employee.image || `/placeholder-avatar.png`}
-                alt={`${employee.firstName} ${employee.lastName}`}
-                className="w-20 h-20 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700 ring-2 ring-white dark:ring-gray-800"
-              />
+              <div className="relative w-20 h-20">
+                <Image
+                  src={employee.image || `/placeholder-avatar.png`}
+                  alt={`${employee.firstName} ${employee.lastName}`}
+                  fill
+                  className="rounded-full object-cover border-2 border-gray-200 dark:border-gray-700 ring-2 ring-white dark:ring-gray-800"
+                />
+              </div>
               <div className="mt-4 sm:mt-0 sm:ml-6">
                 <h2 className="text-xl font-bold text-gray-800 dark:text-white">
                   {employee.firstName} {employee.lastName}

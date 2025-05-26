@@ -4,6 +4,7 @@ import type { User } from "@/types/user"
 import { StarIcon as StarSolid, DocumentTextIcon } from "@heroicons/react/24/solid"
 import { useBookmarks } from "@/store/useBookmarks"
 import Link from "next/link"
+import Image from 'next/image'
 
 interface BookmarkCardProps {
   user: User
@@ -23,10 +24,12 @@ export default function BookmarkCard({ user, onView, onPromote, onAssignToProjec
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 hover:shadow-md transition-all duration-300">
       <div className="flex items-start gap-4">
         {user.image && (
-          <img
+          <Image
             src={user.image || "/placeholder.svg"}
-            alt={`${user.firstName}`}
-            className="w-14 h-14 rounded-full object-cover border-2 border-gray-100 dark:border-gray-700 ring-2 ring-white dark:ring-gray-800"
+            alt={`${user.firstName} ${user.lastName}'s avatar`}
+            width={64}
+            height={64}
+            className="rounded-full"
           />
         )}
         <div className="flex-1">

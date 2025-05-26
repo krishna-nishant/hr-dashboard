@@ -207,7 +207,7 @@ const generateProjects = (user: User) => {
     
     const startDate = getRandomDate(12);
     let endDate = undefined;
-    let completion = status === 'Completed' ? 100 : getRandomInt(10, 90);
+    const completion = status === 'Completed' ? 100 : getRandomInt(10, 90);
     
     if (status === 'Completed') {
       // Generate an end date after the start date

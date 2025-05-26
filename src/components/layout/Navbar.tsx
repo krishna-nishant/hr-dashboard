@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
-import { SunIcon, MoonIcon, BookmarkIcon, ChartBarIcon, HomeIcon } from "@heroicons/react/24/outline"
+import { SunIcon, MoonIcon, BookmarkIcon, ChartBarIcon, HomeIcon, Bars3Icon } from "@heroicons/react/24/outline"
 import {
   BookmarkIcon as BookmarkSolid,
   ChartBarIcon as ChartBarSolid,
@@ -12,7 +12,7 @@ import Link from "next/link"
 import { useBookmarks } from "@/store/useBookmarks"
 import { usePathname } from "next/navigation"
 
-export function Navbar() {
+export default function Navbar() {
   const { theme, setTheme, resolvedTheme } = useTheme()
   const { bookmarkedIds } = useBookmarks()
   const pathname = usePathname()
