@@ -6,10 +6,8 @@ const nextConfig = {
   assetPrefix: '/hr-dashboard/',
   images: {
     unoptimized: true,
-    loader: 'custom',
-    loaderFile: './src/utils/imageLoader.ts',
   },
-  trailingSlash: true,
+  distDir: '.next',
 };
 
 export default nextConfig;
