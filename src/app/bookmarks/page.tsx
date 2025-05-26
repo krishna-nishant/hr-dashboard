@@ -50,7 +50,7 @@ export default function BookmarksPage() {
     // This effect will run whenever bookmarkedIds changes
   }, [bookmarkedIds])
 
-  const handleView = (user: User) => {
+  const handleView = () => {
     // alert(`Viewing ${user.firstName}'s profile`)
   }
 
@@ -137,7 +137,7 @@ export default function BookmarksPage() {
             </div>
             <h2 className="text-2xl font-medium text-gray-800 dark:text-gray-200 mb-3">No bookmarks yet</h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-8">
-              You haven't bookmarked any employees yet. Go to the dashboard and click "Save" on employee cards to
+              You haven&apos;t bookmarked any employees yet. Go to the dashboard and click &quot;Save&quot; on employee cards to
               bookmark them.
             </p>
             <Link

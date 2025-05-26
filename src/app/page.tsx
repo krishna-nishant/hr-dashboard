@@ -9,7 +9,7 @@ import { useSearch } from "@/hooks/useSearch"
 import { UserGroupIcon } from "@heroicons/react/24/outline"
 
 export default function DashboardPage() {
-  const [users, setUsers] = useState<User[]>([])
+  const [allUsers, setAllUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -21,24 +21,24 @@ export default function DashboardPage() {
     updateRatingFilters,
     resetFilters,
     filteredUsers,
-  } = useSearch(users)
+  } = useSearch(allUsers)
 
   useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        const data = await fetchUsers()
+        setAllUsers(data)
+      } catch {
+        setError("Failed to load employees")
+      } finally {
+        setLoading(false)
+      }
+    }
+
     loadUsers()
   }, [])
 
-  const loadUsers = async () => {
-    try {
-      const data = await fetchUsers()
-      setUsers(data)
-    } catch (err) {
-      setError("Something went wrong. Please try again later.")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleView = (user: User) => {
+  const handleView = () => {
     // Would navigate to user profile in a real app
   }
 
@@ -103,7 +103,20 @@ export default function DashboardPage() {
             <h2 className="text-xl text-red-600 mb-4">Oops! Something went wrong</h2>
             <p className="text-gray-600 dark:text-gray-300 mb-8">{error}</p>
             <button
-              onClick={loadUsers}
+              onClick={() => {
+                const loadUsers = async () => {
+                  try {
+                    const data = await fetchUsers()
+                    setAllUsers(data)
+                  } catch {
+                    setError("Failed to load employees")
+                  } finally {
+                    setLoading(false)
+                  }
+                }
+
+                loadUsers()
+              }}
               className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
             >
               Try Again
@@ -134,7 +147,7 @@ export default function DashboardPage() {
           selectedRatings={filters.ratings}
           onRatingChange={updateRatingFilters}
           onReset={resetFilters}
-          totalCount={users.length}
+          totalCount={allUsers.length}
           filteredCount={filteredUsers.length}
         />
 

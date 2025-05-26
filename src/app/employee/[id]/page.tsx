@@ -12,6 +12,7 @@ import ProjectsTab from "@/components/employee/ProjectsTab"
 import FeedbackTab from "@/components/employee/FeedbackTab"
 import { generateEmployeeDetails } from "@/utils/mockDataGenerator"
 import Image from 'next/image'
+import type { EmployeeDetails } from "@/types/employee"
 
 export default function EmployeePage() {
   const { id } = useParams()
@@ -19,7 +20,7 @@ export default function EmployeePage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"overview" | "projects" | "feedback">("overview")
-  const [employeeDetails, setEmployeeDetails] = useState<any>(null)
+  const [employeeDetails, setEmployeeDetails] = useState<EmployeeDetails | null>(null)
 
   useEffect(() => {
     const fetchEmployee = async () => {
@@ -39,7 +40,7 @@ export default function EmployeePage() {
           setEmployee(foundEmployee)
           // Generate mock data for the employee
           const details = generateEmployeeDetails(foundEmployee)
-          setEmployeeDetails(details)
+          setEmployeeDetails(details as EmployeeDetails)
         } else {
           setError("Employee not found")
         }
@@ -159,7 +160,9 @@ export default function EmployeePage() {
           />
 
           <div className="p-6">
-            {activeTab === "overview" && <OverviewTab employee={employee} details={employeeDetails} />}
+            {activeTab === "overview" && employee && employeeDetails && (
+              <OverviewTab employee={employee} details={employeeDetails} />
+            )}
             {activeTab === "projects" && <ProjectsTab projects={employeeDetails?.projects} />}
             {activeTab === "feedback" && <FeedbackTab feedback={employeeDetails?.feedback} />}
           </div>

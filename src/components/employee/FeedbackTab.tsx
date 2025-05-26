@@ -9,18 +9,10 @@ import {
   CheckIcon 
 } from "@heroicons/react/24/outline"
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid"
-
-interface Feedback {
-  id: number
-  from: string
-  date: string
-  rating: number
-  message: string
-  type: "peer" | "manager" | "self"
-}
+import type { Feedback } from "@/types/employee"
 
 interface FeedbackTabProps {
-  feedback: Feedback[]
+  feedback: Feedback[] | undefined;
 }
 
 export default function FeedbackTab({ feedback }: FeedbackTabProps) {
@@ -155,7 +147,7 @@ export default function FeedbackTab({ feedback }: FeedbackTabProps) {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Feedback Type</label>
               <select
                 value={newFeedback.type}
-                onChange={(e) => setNewFeedback((prev) => ({ ...prev, type: e.target.value as any }))}
+                onChange={(e) => setNewFeedback((prev) => ({ ...prev, type: e.target.value }))}
                 className="w-full rounded-lg border border-gray-300 dark:border-gray-700 py-2.5 px-3.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
               >
                 <option value="peer">Peer Review</option>

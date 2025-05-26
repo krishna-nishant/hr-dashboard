@@ -1,4 +1,5 @@
 import { User } from '@/types/user';
+import type { Project, EmployeeDetails, Feedback } from '@/types/employee';
 
 const getRandomElement = <T>(array: T[]): T => {
   return array[Math.floor(Math.random() * array.length)];
@@ -149,9 +150,9 @@ const generatePerformanceHistory = (user: User) => {
 };
 
 // Generate random projects
-const generateProjects = (user: User) => {
+const generateProjects = (user: User): Project[] => {
   const projectCount = getRandomInt(1, 4);
-  const projects = [];
+  const projects: Project[] = [];
   
   const projectNames = {
     'HR': ['Employee Onboarding Redesign', 'Corporate Diwali Event', 'Talent Acquisition Program', 'HR Policy Update', 'Performance Review System', 'Company Culture Initiative'],
@@ -183,7 +184,7 @@ const generateProjects = (user: User) => {
     ]
   };
   
-  const statuses = ['In Progress', 'Completed', 'On Hold'];
+  const statuses: Array<Project['status']> = ['In Progress', 'Completed', 'On Hold'];
   const departmentProjects = projectNames[user.department as keyof typeof projectNames] || projectNames['HR'];
   const departmentRoles = roles[user.department as keyof typeof roles] || roles['HR'];
   const departmentDescriptions = descriptions[user.department as keyof typeof descriptions] || descriptions['HR'];
@@ -233,12 +234,12 @@ const generateProjects = (user: User) => {
 };
 
 // Generate random feedback
-const generateFeedback = (user: User) => {
+const generateFeedback = (): Feedback[] => {
   const feedbackCount = getRandomInt(0, 5);
-  const feedback = [];
+  const feedback: Feedback[] = [];
   
   const names = ['Rahul Sharma', 'Priya Patel', 'Amit Singh', 'Neha Gupta', 'Vikram Mehta', 'Ananya Desai', 'Raj Malhotra'];
-  const types = ['peer', 'manager', 'self'];
+  const types: Array<Feedback['type']> = ['peer', 'manager', 'self'];
   
   const positiveComments = [
     'Consistently delivers high-quality work and meets deadlines.',
@@ -265,7 +266,7 @@ const generateFeedback = (user: User) => {
   ];
   
   for (let i = 0; i < feedbackCount; i++) {
-    const rating = getRandomInt(2, 5); // No ratings below 2 to avoid overly negative feedback
+    const rating = getRandomInt(2, 5);
     const type = getRandomElement(types);
     
     let from;
@@ -296,7 +297,6 @@ const generateFeedback = (user: User) => {
     });
   }
   
-  // Sort by date (newest first)
   return feedback.sort((a, b) => {
     const aDate = new Date(a.date);
     const bDate = new Date(b.date);
@@ -305,13 +305,13 @@ const generateFeedback = (user: User) => {
 };
 
 // Main function to generate all employee details
-export const generateEmployeeDetails = (user: User) => {
+export const generateEmployeeDetails = (user: User): EmployeeDetails => {
   return {
     address: generateAddress(),
     phone: generatePhone(),
     bio: generateBio(user),
     performanceHistory: generatePerformanceHistory(user),
     projects: generateProjects(user),
-    feedback: generateFeedback(user)
+    feedback: generateFeedback()
   };
 }; 

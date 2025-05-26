@@ -1,30 +1,16 @@
 import { DocumentTextIcon as DocumentIcon } from "@heroicons/react/24/outline"
-
-interface Project {
-  id: number
-  name: string
-  role: string
-  status: "In Progress" | "Completed" | "On Hold"
-  startDate: string
-  endDate?: string
-  description: string
-  completion: number
-}
+import type { Project } from "@/types/employee"
 
 interface ProjectsTabProps {
-  projects: Project[]
+  projects: Project[] | undefined;
 }
 
 export default function ProjectsTab({ projects }: ProjectsTabProps) {
   if (!projects || projects.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-        <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-full mb-4">
-          <DocumentIcon className="h-8 w-8 text-gray-500 dark:text-gray-400" />
-        </div>
-        <p className="text-gray-500 dark:text-gray-400 text-lg mb-2">No projects assigned</p>
-        <p className="text-gray-400 dark:text-gray-500 max-w-md">
-          This employee doesn't have any projects assigned yet.
+      <div className="text-center py-8">
+        <p className="text-gray-600 dark:text-gray-400">
+          This employee hasn&apos;t been assigned to any projects yet.
         </p>
       </div>
     )

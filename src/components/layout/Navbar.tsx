@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useTheme } from "next-themes"
-import { SunIcon, MoonIcon, BookmarkIcon, ChartBarIcon, HomeIcon, Bars3Icon } from "@heroicons/react/24/outline"
+import { BookmarkIcon, ChartBarIcon, HomeIcon } from "@heroicons/react/24/outline"
 import {
   BookmarkIcon as BookmarkSolid,
   ChartBarIcon as ChartBarSolid,
@@ -13,7 +12,6 @@ import { useBookmarks } from "@/store/useBookmarks"
 import { usePathname } from "next/navigation"
 
 export default function Navbar() {
-  const { theme, setTheme, resolvedTheme } = useTheme()
   const { bookmarkedIds } = useBookmarks()
   const pathname = usePathname()
   const isDashboard = pathname === "/"
@@ -21,15 +19,13 @@ export default function Navbar() {
   const isAnalyticsPage = pathname === "/analytics"
 
   // Use state to prevent hydration mismatch
-  const [mounted, setMounted] = useState(false)
+  const [, setMounted] = useState(false)
 
   // After mounting, we can safely show the UI
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Determine which icon to show based on the current theme
-  const showSunIcon = mounted && resolvedTheme === "dark"
 
   return (
     <nav className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-sm sticky top-0 z-10">
